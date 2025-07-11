@@ -1,0 +1,55 @@
+{
+	"name": "just-error",
+	"version": "0.0.0",
+	"license": "MIT",
+	"description": "A json-serializable, incredibly ergonomic way of declaring and working with errors in your TypeScript applications.",
+	"author": "Aidan Bleser",
+	"homepage": "https://github.com/ieedan/just-error#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ieedan/just-error.git"
+	},
+	"bugs": {
+		"url": "https://github.com/ieedan/just-error/issues"
+	},
+	"sideEffects": false,
+	"type": "module",
+	"packageManager": "pnpm@10.13.1",
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": "./dist/index.mjs",
+		"./utils": "./dist/utils.mjs"
+	},
+	"main": "./dist/index.d.mjs",
+	"module": "./dist/index.d.mjs",
+	"types": "./dist/index.d.mts",
+	"typesVersions": {
+		"*": {
+			"utils": [
+				"./dist/utils.d.mts"
+			]
+		}
+	},
+	"scripts": {
+		"start": "unbuild --silent && node ./dist/index.js",
+		"build": "unbuild",
+		"run:dev": "node ./dist/index.js",
+		"format": "biome format --write",
+		"lint": "biome lint --write",
+		"check": "biome check && pnpm check:types",
+		"test": "vitest",
+		"check:types": "tsc",
+		"changeset:version": "changeset version && pnpm format",
+		"ci:release": "pnpm build && changeset publish"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.1.1",
+		"@changesets/cli": "^2.29.4",
+		"@types/node": "^22.15.24",
+		"typescript": "^5.8.3",
+		"unbuild": "^3.5.0",
+		"vitest": "^3.1.4"
+	}
+}
