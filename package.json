@@ -22,8 +22,8 @@
 		".": "./dist/index.mjs",
 		"./utils": "./dist/utils.mjs"
 	},
-	"main": "./dist/index.d.mjs",
-	"module": "./dist/index.d.mjs",
+	"main": "./dist/index.mjs",
+	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.mts",
 	"typesVersions": {
 		"*": {
