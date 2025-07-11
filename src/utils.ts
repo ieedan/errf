@@ -1,7 +1,7 @@
-import type { AnyError, UserFacingError, create } from ".";
+import type { AnyError, UserFacingError } from '.';
 
 type ErrorHandlers<T extends AnyError, O> = {
-	[K in T["name"]]: (error: Extract<T, { name: K }>) => O;
+	[K in T['name']]: (error: Extract<T, { name: K }>) => O;
 };
 
 /**
@@ -11,12 +11,15 @@ type ErrorHandlers<T extends AnyError, O> = {
  * @param handlers - The handlers for each error type
  * @returns
  */
-export function match<T extends AnyError, O>(error: T, handlers: ErrorHandlers<T, O>): O {
+export function match<T extends AnyError, O>(
+	error: T,
+	handlers: ErrorHandlers<T, O>,
+): O {
 	return (handlers as any)[error.name](error);
 }
 
 type InternalErrorHandlers<T extends AnyError, O> = {
-	[K in T["name"]]: Extract<T, { name: K }> extends { type: "internal" }
+	[K in T['name']]: Extract<T, { name: K }> extends { type: 'internal' }
 		? (error: Extract<T, { name: K }>) => O
 		: never;
 };
@@ -34,17 +37,15 @@ type NeverNever<T> = {
  */
 export function mapToUserFacingError<E extends AnyError>(
 	error: E,
-	handlers: NeverNever<InternalErrorHandlers<E, string>>
+	handlers: NeverNever<InternalErrorHandlers<E, string>>,
 ): UserFacingError {
-	if (error.type === "user") return error;
+	if (error.type === 'user') return error;
 
 	const message = (handlers as any)[error.name](error);
 
 	return {
 		...error,
-		type: "user",
+		type: 'user',
 		userMessage: message,
 	};
 }
-
-export type ErrorTypes<Factory extends ReturnType<typeof create>, Key extends keyof Factory> = ReturnType<Factory[Key]>;
