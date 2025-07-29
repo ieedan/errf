@@ -89,7 +89,7 @@ const result = ResultAsync.fromPromise(
 
 Errors defined with the `userMessage` property considered user facing errors. These are errors that are allowed to be shown to the user.
 
-> [!IMPORTANT] Internal errors should never be shown to the user.
+> [!WARN] Internal errors should never be shown to the user.
 
 ### Error Handling Utilities
 
