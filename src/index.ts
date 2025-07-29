@@ -50,9 +50,61 @@ type _InternalError<Key extends string, Code extends string, Config> = {
 	timestamp: number;
 };
 
+/**
+ * Internal error type. These errors should never be exposed to the user.
+ */
 export type InternalError = _InternalError<string, string, unknown>;
+/**
+ * User facing error type. These errors should be safe to expose to the user.
+ */
 export type UserFacingError = _UserFacingError<string, string, string, unknown>;
 export type AnyError = InternalError | UserFacingError;
+
+/**
+ * Get all possible errors from an error factory.
+ *
+ * @example
+ * ```ts
+ * type Errors = InferAnyError<typeof error>;
+ * // ApiError | EmailError
+ *
+ * const error = justerror.create({
+ *     ApiError: {
+ *         code: "API_001",
+ *         message: (args: { url: string }) => `Error fetching ${args.url}`,
+ *     },
+ *     EmailError: {
+ *         code: "EMAIL_001",
+ *         message: (args: { email: string }) => `Error sending email to ${args.email}`,
+ *     },
+ * });
+ * ```
+ */
+export type InferAnyError<Factory extends ErrorFactory<any>> = ReturnType<
+	Factory[keyof Factory]
+>;
+
+/**
+ * Get a specific error from an error factory.
+ *
+ * @example
+ * ```ts
+ * type Error = InferError<typeof error, 'ApiError'>;
+ * // ApiError
+ *
+ * // Export a helper type to get the type of an error by name
+ * export type Error<K extends keyof typeof error> = InferError<typeof error, K>;
+ *
+ * // Now you can use each error individually
+ * function foo(): Result<..., Error<'ApiError'>> {
+ *     // ...
+ * }
+ * ```
+ */
+export type InferError<
+	Factory extends ErrorFactory<any>,
+	Key extends keyof Factory,
+> = ReturnType<Factory[Key]>;
 
 type ErrorFactory<T extends Record<string, CreateErrorsError<string, any>>> = {
 	[K in keyof T]: T[K]['message'] extends (args: infer A) => string
@@ -65,6 +117,24 @@ type ErrorFactory<T extends Record<string, CreateErrorsError<string, any>>> = {
 			) => AppError<K & string, T[K]['code'], T[K]['userMessage'], undefined>;
 };
 
+/**
+ * Create an error factory.
+ *
+ * @param errors The errors that can be created by the factory.
+ * @returns
+ *
+ * @example
+ * ```ts
+ * const error = justerror.create({
+ *     ApiError: {
+ *         code: "API_001",
+ *         message: (args: { url: string }) => `Error fetching ${args.url}`,
+ *     },
+ * });
+ *
+ * error.ApiError({ url: 'https://example.com' });
+ * ```
+ */
 export function create<
 	Code extends string,
 	T extends Record<string, CreateErrorsError<Code, any>>,

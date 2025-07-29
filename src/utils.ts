@@ -10,6 +10,22 @@ type ErrorHandlers<T extends AnyError, O> = {
  * @param error - The error to match
  * @param handlers - The handlers for each error type
  * @returns
+ *
+ * @example
+ * ```ts
+ * const error = justerror.create({
+ *     ApiError: {
+ *         code: "API_001",
+ *         message: (args: { url: string }) => `Error fetching ${args.url}`,
+ *     },
+ * });
+ *
+ * const result = match(error.ApiError({ url: 'https://example.com' }), {
+ *     ApiError: (e) => {
+ *         // ...
+ *     },
+ * });
+ * ```
  */
 export function match<T extends AnyError, O>(
 	error: T,
@@ -34,6 +50,19 @@ type NeverNever<T> = {
  * @param error - The error to map.
  * @param map - A function that maps the internal error to a user facing error message.
  * @returns
+ *
+ * @example
+ * ```ts
+ * const error = justerror.create({
+ *     ApiError: {
+ *         code: "API_001",
+ *         message: (args: { url: string }) => `Error fetching ${args.url}`,
+ *     },
+ * });
+ *
+ * const result = mapToUserFacingError(error.ApiError({ url: 'https://example.com' }), {
+ *     ApiError: (e) => 'User facing error message',
+ * });
  */
 export function mapToUserFacingError<E extends AnyError>(
 	error: E,

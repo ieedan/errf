@@ -131,10 +131,10 @@ Here are a few types you may want to implement to make using `just-error` easier
 import * as justerror from "just-error";
 
 // allows you to get the type of an error by name i.e. Error<"ApiError">
-export type Error<T extends keyof typeof error> = ReturnType<(typeof error)[T]>;
+export type Error<K extends keyof typeof error> = justerror.InferError<typeof error, K>;
 
 // A union of all defined errors
-export type AnyError = InternalError<keyof typeof error>;
+export type AnyError = justerror.InferAnyError<typeof error>;
 
 const error = justerror.create({
     ApiError: {
