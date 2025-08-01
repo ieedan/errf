@@ -1,17 +1,17 @@
-# just-error ⚠️
+# errf ⚠️
 
-![NPM Downloads](https://img.shields.io/npm/dm/just-error)
+![NPM Downloads](https://img.shields.io/npm/dm/errf)
 
 A json-serializable, incredibly ergonomic way of declaring and working with errors in your TypeScript applications.
 
 ```ts
-import * as justerror from ".";
+import * as errf from ".";
 
 // Define your errors
 
 export type Error<T extends keyof typeof error> = ReturnType<(typeof error)[T]>;
 
-const error = justerror.create({
+const error = errf.create({
 	ApiError: {
 		code: "API_001",
 		message: (args: { url: string }) => `Error fetching ${args.url}`,
@@ -34,7 +34,7 @@ function safeFn(): Result<string, Error<"ApiError"> | Error<"EmailError">> {
 const result = safeFn().match(
 	(v) => console.log(v),
 	(e) => {
-		justerror.match(e, {
+		errf.match(e, {
 			ApiError: (e) => console.log(`We couldn't service your request to ${e.config.url}`),
 			EmailError: () => console.error("We encountered an unexpected error"),
 		});
@@ -48,18 +48,18 @@ With the addition of libraries like [neverthrow](https://github.com/supermacro/n
 
 ## Getting Started
 
-Install `just-error`:
+Install `errf`:
 
 ```sh
-npm i just-error
+npm i errf
 ```
 
 Define your errors:
 
 ```ts
-import * as justerror from "just-error";
+import * as errf from "errf";
 
-const error = justerror.create({
+const error = errf.create({
 	ApiError: {
 		code: "API_001",
 		message: (args: { url: string }) => `Error fetching ${args.url}`,
@@ -96,12 +96,12 @@ Errors defined with the `userMessage` property considered user facing errors. Th
 
 Often times error handling can be verbose and it is expected for you to create utility functions for handling your user facing errors.
 
-We can import the `UserFacingError` type from `just-error` to ensure that we are only passing user facing errors to the function.
+We can import the `UserFacingError` type from `errf` to ensure that we are only passing user facing errors to the function.
 
 > For functions expecting only internal errors you can use the `InternalError` type.
 
 ```ts
-import { UserFacingError } from "just-error";
+import { UserFacingError } from "errf";
 
 function showErrorToast(error: UserFacingError) {
     // ...
@@ -115,29 +115,29 @@ You will often find yourself wanting to map an internal error to better user fac
 > This can also be useful for localizing your error messages!
 
 ```ts
-import * as justerror from "just-error";
+import * as errf from "errf";
 
 // ...
 
-const userFacingError = result.mapError((e) => justerror.mapToUserFacingError(e, {
+const userFacingError = result.mapError((e) => errf.mapToUserFacingError(e, {
     ApiError: (e) => `There was an error serving your request from ${e.config.url}`,
 }));
 ```
 
 ## Types
 
-Here are a few types you may want to implement to make using `just-error` easier:
+Here are a few types you may want to implement to make using `errf` easier:
 
 ```ts
-import * as justerror from "just-error";
+import * as errf from "errf";
 
 // allows you to get the type of an error by name i.e. Error<"ApiError">
-export type Error<K extends keyof typeof error> = justerror.InferError<typeof error, K>;
+export type Error<K extends keyof typeof error> = errf.InferError<typeof error, K>;
 
 // A union of all defined errors
-export type AnyError = justerror.InferAnyError<typeof error>;
+export type AnyError = errf.InferAnyError<typeof error>;
 
-const error = justerror.create({
+const error = errf.create({
     ApiError: {
         code: "API_001",
         message: (args: { url: string }) => `Error fetching ${args.url}`,

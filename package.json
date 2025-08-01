@@ -1,16 +1,16 @@
 {
-	"name": "just-error",
+	"name": "errf",
 	"version": "0.0.0",
 	"license": "MIT",
 	"description": "A json-serializable, incredibly ergonomic way of declaring and working with errors in your TypeScript applications.",
 	"author": "Aidan Bleser",
-	"homepage": "https://github.com/ieedan/just-error#readme",
+	"homepage": "https://github.com/ieedan/errf#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ieedan/just-error.git"
+		"url": "git+https://github.com/ieedan/errf.git"
 	},
 	"bugs": {
-		"url": "https://github.com/ieedan/just-error/issues"
+		"url": "https://github.com/ieedan/errf/issues"
 	},
 	"sideEffects": false,
 	"type": "module",

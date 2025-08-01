@@ -5,6 +5,6 @@
 	},
 	"editor.defaultFormatter": "biomejs.biome",
 	"cSpell.words": [
-		"justerror"
+		"errf"
 	]
 }

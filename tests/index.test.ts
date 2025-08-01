@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import * as justerror from '../src/index.js';
+import * as errf from '../src/index.js';
 
-const error = justerror.create({
+const error = errf.create({
 	InvalidArgumentError: {
 		code: 'USER_001',
 		message: (args: { field: string; value?: unknown }) =>
@@ -37,7 +37,7 @@ describe('match', () => {
 			? error.InternalError({ message: 'test' })
 			: error.InvalidArgumentError({ field: 'test', value: 'test' });
 
-		const result = justerror.match(e, {
+		const result = errf.match(e, {
 			InternalError: (e) => e.message,
 			InvalidArgumentError: (e) => e.message,
 		});
@@ -47,7 +47,7 @@ describe('match', () => {
 		// error matching should be exhaustive if it isn't tsc will fail the next line
 
 		// @ts-expect-error User must handle every possible case
-		justerror.match(e, {
+		errf.match(e, {
 			InternalError: (e) => e.message,
 		});
 	});
@@ -63,7 +63,7 @@ describe('mapToUserFacingError', () => {
 			: error.InvalidArgumentError({ field: 'test', value: 'test' });
 
 		// only should have to handle internal errors
-		const result = justerror.mapToUserFacingError(e, {
+		const result = errf.mapToUserFacingError(e, {
 			InternalError: () => 'There was an error serving your request',
 		});
 
@@ -77,7 +77,7 @@ describe('mapToUserFacingError', () => {
 
 		// users should only have to handle internal errors otherwise tsc will fail the next line
 
-		justerror.mapToUserFacingError(e, {
+		errf.mapToUserFacingError(e, {
 			InternalError: (e) => e.message,
 			// @ts-expect-error Shouldn't need to handle user facing errors
 			InvalidArgumentError: (e) => e.message,

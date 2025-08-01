@@ -68,7 +68,7 @@ export type AnyError = InternalError | UserFacingError;
  * type Errors = InferAnyError<typeof error>;
  * // ApiError | EmailError
  *
- * const error = justerror.create({
+ * const error = errf.create({
  *     ApiError: {
  *         code: "API_001",
  *         message: (args: { url: string }) => `Error fetching ${args.url}`,
@@ -125,7 +125,7 @@ type ErrorFactory<T extends Record<string, CreateErrorsError<string, any>>> = {
  *
  * @example
  * ```ts
- * const error = justerror.create({
+ * const error = errf.create({
  *     ApiError: {
  *         code: "API_001",
  *         message: (args: { url: string }) => `Error fetching ${args.url}`,

@@ -13,7 +13,7 @@ type ErrorHandlers<T extends AnyError, O> = {
  *
  * @example
  * ```ts
- * const error = justerror.create({
+ * const error = errf.create({
  *     ApiError: {
  *         code: "API_001",
  *         message: (args: { url: string }) => `Error fetching ${args.url}`,
@@ -53,7 +53,7 @@ type NeverNever<T> = {
  *
  * @example
  * ```ts
- * const error = justerror.create({
+ * const error = errf.create({
  *     ApiError: {
  *         code: "API_001",
  *         message: (args: { url: string }) => `Error fetching ${args.url}`,
