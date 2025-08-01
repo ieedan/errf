@@ -47,6 +47,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.1.1",
 		"@changesets/cli": "^2.29.4",
+		"@svitejs/changesets-changelog-github-compact": "^1.2.0",
 		"@types/node": "^22.15.24",
 		"typescript": "^5.8.3",
 		"unbuild": "^3.5.0",
