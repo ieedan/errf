@@ -2,7 +2,7 @@
 
 ![NPM Downloads](https://img.shields.io/npm/dm/errf)
 
-A json-serializable, incredibly ergonomic way of declaring and working with errors in your TypeScript applications.
+A json-serializable, incredibly ergonomic way of defining and working with errors in your TypeScript applications.
 
 ```ts
 import * as errf from ".";
