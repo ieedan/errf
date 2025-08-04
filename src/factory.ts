@@ -5,19 +5,28 @@ type CreateErrorsError<Code extends string, Config> = {
 	recoverable?: boolean;
 };
 
-type IsStringOrFunction<T> = T extends string ? true : T extends (...args: any[]) => any ? true : false;
+type IsStringOrFunction<T> = T extends string
+	? true
+	: T extends (...args: any[]) => any
+		? true
+		: false;
 
 type AppError<
 	Key extends string,
 	Code extends string,
 	UserMessage,
-	Config
+	Config,
 > = IsStringOrFunction<UserMessage> extends true
 	? _UserFacingError<Key, Code, string, Config>
 	: _InternalError<Key, Code, Config>;
 
-type _UserFacingError<Key extends string, Code extends string, UserMessage extends string, Config> = {
-	type: "user";
+type _UserFacingError<
+	Key extends string,
+	Code extends string,
+	UserMessage extends string,
+	Config,
+> = {
+	type: 'user';
 	name: Key;
 	code: Code;
 	message: string;
@@ -29,7 +38,7 @@ type _UserFacingError<Key extends string, Code extends string, UserMessage exten
 };
 
 type _InternalError<Key extends string, Code extends string, Config> = {
-	type: "internal";
+	type: 'internal';
 	name: Key;
 	code: Code;
 	message: string;
@@ -50,9 +59,14 @@ export type UserFacingError = _UserFacingError<string, string, string, unknown>;
 export type AnyError = InternalError | UserFacingError;
 
 type ErrorFactory<T extends Record<string, CreateErrorsError<string, any>>> = {
-	[K in keyof T]: T[K]["message"] extends (args: infer A) => string
-		? (args: A, cause?: unknown) => AppError<K & string, T[K]["code"], T[K]["userMessage"], A>
-		: (cause?: unknown) => AppError<K & string, T[K]["code"], T[K]["userMessage"], undefined>;
+	[K in keyof T]: T[K]['message'] extends (args: infer A) => string
+		? (
+				args: A,
+				cause?: unknown,
+			) => AppError<K & string, T[K]['code'], T[K]['userMessage'], A>
+		: (
+				cause?: unknown,
+			) => AppError<K & string, T[K]['code'], T[K]['userMessage'], undefined>;
 };
 
 /**
@@ -73,9 +87,10 @@ type ErrorFactory<T extends Record<string, CreateErrorsError<string, any>>> = {
  * error.ApiError({ url: 'https://example.com' });
  * ```
  */
-export function create<Code extends string, T extends Record<string, CreateErrorsError<Code, any>>>(
-	errors: T
-): ErrorFactory<T> {
+export function create<
+	Code extends string,
+	T extends Record<string, CreateErrorsError<Code, any>>,
+>(errors: T): ErrorFactory<T> {
 	const error = {};
 
 	for (const [k, v] of Object.entries(errors)) {
@@ -84,11 +99,17 @@ export function create<Code extends string, T extends Record<string, CreateError
 
 		if (value.userMessage) {
 			(error as any)[key] = (args: any, cause?: unknown) => ({
-				type: "user",
+				type: 'user',
 				name: key,
 				code: value.code,
-				message: typeof value.message === "function" ? value.message(args) : value.message,
-				userMessage: typeof value.userMessage === "function" ? value.userMessage(args) : value.userMessage,
+				message:
+					typeof value.message === 'function'
+						? value.message(args)
+						: value.message,
+				userMessage:
+					typeof value.userMessage === 'function'
+						? value.userMessage(args)
+						: value.userMessage,
 				recoverable: value.recoverable ?? false,
 				config: args,
 				cause,
@@ -96,10 +117,13 @@ export function create<Code extends string, T extends Record<string, CreateError
 			});
 		} else {
 			(error as any)[key] = (args: any, cause?: unknown) => ({
-				type: "internal",
+				type: 'internal',
 				name: key,
 				code: value.code,
-				message: typeof value.message === "function" ? value.message(args) : value.message,
+				message:
+					typeof value.message === 'function'
+						? value.message(args)
+						: value.message,
 				recoverable: value.recoverable ?? false,
 				config: args,
 				cause,
@@ -131,7 +155,9 @@ export function create<Code extends string, T extends Record<string, CreateError
  * });
  * ```
  */
-export type InferAnyError<Factory extends ErrorFactory<any>> = ReturnType<Factory[keyof Factory]>;
+export type InferAnyError<Factory extends ErrorFactory<any>> = ReturnType<
+	Factory[keyof Factory]
+>;
 
 /**
  * Get a specific error from an error factory.
@@ -150,4 +176,7 @@ export type InferAnyError<Factory extends ErrorFactory<any>> = ReturnType<Factor
  * }
  * ```
  */
-export type InferError<Factory extends ErrorFactory<any>, Key extends keyof Factory> = ReturnType<Factory[Key]>;
+export type InferError<
+	Factory extends ErrorFactory<any>,
+	Key extends keyof Factory,
+> = ReturnType<Factory[Key]>;
