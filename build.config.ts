@@ -1,7 +1,7 @@
 import { defineBuildConfig } from "unbuild";
 
 export default defineBuildConfig({
-	entries: ["src/index.ts", "src/utils.ts"],
+	entries: ["src/index.ts"],
 	clean: true,
 	declaration: "node16",
 	rollup: {

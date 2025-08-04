@@ -1,4 +1,4 @@
-import type { AnyError, UserFacingError } from '.';
+import type { AnyError, UserFacingError } from './factory';
 
 type ErrorHandlers<T extends AnyError, O> = {
 	[K in T['name']]: (error: Extract<T, { name: K }>) => O;
