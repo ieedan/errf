@@ -1,6 +1,6 @@
 {
 	"name": "errf",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"license": "MIT",
 	"description": "A json-serializable, incredibly ergonomic way of declaring and working with errors in your TypeScript applications.",
 	"author": "Aidan Bleser",

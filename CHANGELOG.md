@@ -1,5 +1,11 @@
 # errf
 
+## 0.1.1
+### Patch Changes
+
+
+- fix: Ensure all utilities are exported ([`81bbc3e`](https://github.com/ieedan/errf/commit/81bbc3ecfc828f6cb645f265fd161e97fe3394ea))
+
 ## 0.1.0
 ### Minor Changes
 
