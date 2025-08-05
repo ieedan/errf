@@ -1,5 +1,11 @@
 # errf
 
+## 0.1.2
+### Patch Changes
+
+
+- feat: Add `InferErrorCodes` type ([#6](https://github.com/ieedan/errf/pull/6))
+
 ## 0.1.1
 ### Patch Changes
 
