@@ -9,7 +9,7 @@ import * as errf from ".";
 
 // Define your errors
 
-export type Error<T extends keyof typeof error> = ReturnType<(typeof error)[T]>;
+export type Error<K extends keyof typeof error> = errf.InferError<typeof error, K>;
 
 const error = errf.create({
 	ApiError: {
