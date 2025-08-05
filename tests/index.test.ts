@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import * as errf from '../src/index.js';
+import type { InferAnyError, InferError, InferErrorCodes } from '../src/index';
+import * as errf from '../src/index';
+
+/**
+ * In some places we use @ts-expect-error to easily test types. If you see it that's what it's for.
+ */
 
 const error = errf.create({
 	InvalidArgumentError: {
@@ -13,7 +18,28 @@ const error = errf.create({
 		code: 'INTERNAL_001',
 		message: (args: { message: string }) => `Internal error: ${args.message}`,
 	},
+	InternalError2: {
+		code: 'INTERNAL_002',
+		message: (args: { message: string }) => `Internal error 2: ${args.message}`,
+	},
 });
+
+type Error<T extends keyof typeof error> = InferError<typeof error, T>;
+
+type InternalError = Error<'InternalError'>;
+
+type ErrorCodes = InferErrorCodes<typeof error>;
+
+type AnyError = InferAnyError<typeof error>;
+
+// should not error
+const _anyError: AnyError = error.InternalError({ message: 'test' });
+
+// @ts-expect-error - This should be an error
+const _errorCode: ErrorCodes = 'test';
+
+// @ts-expect-error - This should be an error
+const _internalError: InternalError = error.InternalError2({ message: 'test' });
 
 describe('create', () => {
 	it('Should create the correct error', () => {
