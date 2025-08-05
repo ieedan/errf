@@ -137,6 +137,9 @@ export type Error<K extends keyof typeof error> = errf.InferError<typeof error, 
 // A union of all defined errors
 export type AnyError = errf.InferAnyError<typeof error>;
 
+// A union of all defined error codes
+export type ErrorCodes = errf.InferErrorCodes<typeof error>;
+
 const error = errf.create({
     ApiError: {
         code: "API_001",

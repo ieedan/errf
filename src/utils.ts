@@ -1,4 +1,4 @@
-import type { AnyError, UserFacingError } from './factory';
+import type { AnyError, ErrorFactory, UserFacingError } from './factory';
 
 type ErrorHandlers<T extends AnyError, O> = {
 	[K in T['name']]: (error: Extract<T, { name: K }>) => O;
@@ -78,3 +78,62 @@ export function mapToUserFacingError<E extends AnyError>(
 		userMessage: message,
 	};
 }
+
+/**
+ * Get all possible errors from an error factory.
+ *
+ * @example
+ * ```ts
+ * type Errors = InferAnyError<typeof error>;
+ * // ApiError | EmailError
+ *
+ * const error = errf.create({
+ *     ApiError: {
+ *         code: "API_001",
+ *         message: (args: { url: string }) => `Error fetching ${args.url}`,
+ *     },
+ *     EmailError: {
+ *         code: "EMAIL_001",
+ *         message: (args: { email: string }) => `Error sending email to ${args.email}`,
+ *     },
+ * });
+ * ```
+ */
+export type InferAnyError<Factory extends ErrorFactory<any>> = ReturnType<
+	Factory[keyof Factory]
+>;
+
+/**
+ * Get a specific error from an error factory.
+ *
+ * @example
+ * ```ts
+ * type Error = InferError<typeof error, 'ApiError'>;
+ * // ApiError
+ *
+ * // Export a helper type to get the type of an error by name
+ * export type Error<K extends keyof typeof error> = InferError<typeof error, K>;
+ *
+ * // Now you can use each error individually
+ * function foo(): Result<..., Error<'ApiError'>> {
+ *     // ...
+ * }
+ * ```
+ */
+export type InferError<
+	Factory extends ErrorFactory<any>,
+	Key extends keyof Factory,
+> = ReturnType<Factory[Key]>;
+
+/**
+ * Get the error codes from an error factory.
+ *
+ * @example
+ * ```ts
+ * type ErrorCodes = InferErrorCodes<typeof error>;
+ * // "API_001" | "EMAIL_001"
+ * ```
+ */
+export type InferErrorCodes<Factory extends ErrorFactory<any>> = ReturnType<
+	Factory[keyof Factory]
+>['code'];
