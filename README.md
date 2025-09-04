@@ -151,3 +151,21 @@ const error = errf.create({
     },
 });
 ```
+
+## Tips
+
+### Flattening Thrown Errors
+
+One thing I run into often when calling my own APIs is that there are multiple types of errors. There are the errors that you prepare for on the server and those that you can't prepare for like network errors on the client. For this we will often want to wrap our network calls in a try catch which can make handling errors as results a bit tedious especially if you want to *never throw*.
+
+One solution to this is to flatten the errors into a single error type with a function like this:
+```ts
+export async function flatten<T, E extends AnyError, E2 extends AnyError>(
+	promise: Promise<Result<T, E>>,
+	mapThrownError: (e: unknown) => E2
+): Promise<Result<T, E | E2>> {
+	return promise.catch((e) => err(mapThrownError(e)));
+}
+```
+
+This way we catch any errors throw by the promise which would be unexpected and then map them to the expected error type using the mapThrownError function. This way instead of ignoring the possibility of a thrown error we can handle it and return a result.
