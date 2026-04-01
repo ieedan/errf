@@ -5,7 +5,7 @@
 A json-serializable, incredibly ergonomic way of defining and working with errors in your TypeScript applications.
 
 ```ts
-import * as errf from ".";
+import * as errf from "errf";
 
 // Define your errors
 
